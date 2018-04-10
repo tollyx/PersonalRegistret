@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Uppgift2 {
+namespace PersonalRegistret {
     class Employee {
         public string Name { get; set; }
 

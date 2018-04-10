@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Uppgift2 {
+namespace PersonalRegistret {
     class Program {
         static Company company = new Company();
 
