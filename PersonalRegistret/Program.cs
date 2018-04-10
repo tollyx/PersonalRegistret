@@ -47,36 +47,36 @@ namespace PersonalRegistret {
                 company = Company.Deserialize(File.ReadAllText("employees.txt"));
             }
             catch (FileNotFoundException) {
-                Console.WriteLine("Kunde inte hitta filen 'employees.txt'");
+                Console.WriteLine("Could not find the file 'employees.txt'");
                 return;
             }
-            Console.WriteLine("Laddat.");
+            Console.WriteLine("Loaded 'employees.txt'.");
         }
 
         private static void SaveCompany() {
             File.WriteAllText("employees.txt", company.Serialize());
-            Console.WriteLine("Sparat.");
+            Console.WriteLine("Saved to 'employees.txt'.");
         }
 
         private static void ModifyEmployee() {
             if (company.Employees.Count == 0) {
-                Console.WriteLine("Det finns inga anställda att redigera.");
+                Console.WriteLine("There are no employees to modify.");
                 return;
             }
 
-            Console.WriteLine("Skriv in namnet på den anställda du vill redigera: \t(hela namnet behövs inte, lämna blankt för att avbryta)");
+            Console.WriteLine("Enter the name of the employee to modify: \t(Whole name not needed, leave it empty to cancel)");
             Employee emp = PromptEmployee();
             if (emp == null) {
                 return;
             }
 
-            Console.WriteLine($"Skriv in ett nytt namn: ({emp.Name}) \t(Lämna blankt för att inte ändra namnet)");
+            Console.WriteLine($"Enter a new name: ({emp.Name}) \t(leave it empty to not modify the name)");
             string newname = Prompt();
             if (!string.IsNullOrWhiteSpace(newname)) {
                 emp.Name = newname;
             }
 
-            Console.WriteLine($"Skriv in en ny lön: ({emp.Salary}kr) \t(Endast siffror, -1 eller blankt för att avbryta)");
+            Console.WriteLine($"Enter  a new salary: ({emp.Salary}) \t(only numbers, enter -1 or leave it empty to cancel)");
             int newsalary = PromptInt();
             if (newsalary < 0) {
                 return;
@@ -85,13 +85,13 @@ namespace PersonalRegistret {
         }
 
         private static void RemoveEmployee() {
-            Console.WriteLine("Skriv in namnet på den anställda du vill ta bort: \t (hela namnet behövs inte, lämna blankt för att avbryta)");
+            Console.WriteLine("Enter the name of the employee you want to remove: \t (whole name not needed, leave it empty to cancel)");
             Employee employee = PromptEmployee();
             if (employee == null) {
                 return;
             }
             
-            Console.WriteLine($"Är du säker på att du vill ta bort {employee.Name}? \t(ja/nej)");
+            Console.WriteLine($"Are you sure you want to remove {employee.Name}? \t(yes/no)");
             while (true) {
                 string input = Prompt().ToLower().Trim();
                 if (input == "ja" || input == "j" || input == "yes" || input == "y") {
@@ -102,19 +102,19 @@ namespace PersonalRegistret {
                     return;
                 }
                 else {
-                    Console.WriteLine("Ja eller nej?");
+                    Console.WriteLine("Yes or No?");
                 }
             }
         }
 
         private static void AddEmployee() {
-            Console.WriteLine("Skriv in namnet på den anställda: \t(lämna blankt för att avbryta)");
+            Console.WriteLine("Enter name: \t(leave it empty to cancel)");
             string name = Prompt().Trim();
             if (string.IsNullOrWhiteSpace(name)) {
                 return;
             }
 
-            Console.WriteLine("Skriv in lön: \t(endast siffror, -1 eller blankt för att avbryta)");
+            Console.WriteLine("Enter salary: \t(only numbers, enter -1 or leave it empty to cancel)");
             int salary = PromptInt();
             if (salary < 0) {
                 return;
@@ -128,7 +128,7 @@ namespace PersonalRegistret {
             int total = 0;
             var employees = company.Employees;
             if (employees.Count == 0) {
-                Console.WriteLine("Inga anställda.");
+                Console.WriteLine("No employees to list.");
                 return;
             }
 
@@ -137,20 +137,19 @@ namespace PersonalRegistret {
                 total += emp.Salary;
                 output += $"{emp.Name}:\t{emp.Salary}kr ({emp.SalaryLevel})\n";
             }
-            Console.WriteLine($"-- Totallön: {total}kr -- Medellön: {total / employees.Count}kr --");
+            Console.WriteLine($"-- Total salary: {total} -- Average salary: {total / employees.Count} --");
             Console.WriteLine(output);
         }
 
         public static int Menu() {
-            Console.WriteLine("Huvudmeny");
-            Console.WriteLine("-------------------");
-            Console.WriteLine("1. list: Visa alla anställda");
-            Console.WriteLine("2. add:  Lägg till en ny anställd");
-            Console.WriteLine("3. rem:  Ta bort en anställd");
-            Console.WriteLine("4. mod:  Ändra på en anställd");
-            Console.WriteLine("5. save: Spara ändringar till fil");
-            Console.WriteLine("6. load: Ladda anställda från fil");
-            Console.WriteLine("0. quit: Avsluta programmet");
+            Console.WriteLine("------ Main Menu ------");
+            Console.WriteLine("1. list: List all employees");
+            Console.WriteLine("2. add:  Add a new employee");
+            Console.WriteLine("3. rem:  Remove an employee");
+            Console.WriteLine("4. mod:  Modify an employee");
+            Console.WriteLine("5. save: Save employees to file");
+            Console.WriteLine("6. load: Load employees from file");
+            Console.WriteLine("0. quit: Exit the program");
             while (true) {
                 string input = Prompt();
                 if (Int32.TryParse(input, out int result)) {
@@ -158,7 +157,7 @@ namespace PersonalRegistret {
                         return result;
                     }
                     else {
-                        Console.WriteLine("Ogiltigt val.");
+                        Console.WriteLine("Invalid choice.");
                     }
                 }
                 else if (input == "list") {
@@ -183,7 +182,7 @@ namespace PersonalRegistret {
                     return 0;
                 }
                 else {
-                    Console.WriteLine("Ogiltigt kommando.");
+                    Console.WriteLine("Invalid command.");
                 }
             }
         }
@@ -204,7 +203,7 @@ namespace PersonalRegistret {
                     return company.Employees.First(e => e.Name.ToLower().Contains(input));
                 }
                 catch (InvalidOperationException) {
-                    Console.WriteLine($"Hittade ingen anställd med namnet {input}.");
+                    Console.WriteLine($"Could not find an employee with the name {input}.");
                     return null;
                 }
             }
@@ -220,7 +219,7 @@ namespace PersonalRegistret {
                     return result;
                 }
                 else {
-                    Console.WriteLine("Endast siffror tack.");
+                    Console.WriteLine("Only numbers please.");
                 }
             }
         }

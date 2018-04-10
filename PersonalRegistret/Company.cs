@@ -53,7 +53,7 @@ namespace PersonalRegistret {
                     comp.AddEmployee(new Employee(name, salary));
                 }
                 else {
-                    Console.WriteLine("Varning: Ett fält hade ogiltigt värde, data kan ha gått förlorat.");
+                    Console.WriteLine("Warning: An entry had an invalid value, data might have been lost.");
                 }
             }
 
