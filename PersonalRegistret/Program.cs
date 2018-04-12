@@ -8,38 +8,34 @@ using System.IO;
 namespace PersonalRegistret {
     class Program {
         static Company company = new Company();
+        static bool isRunning = true;
+
+        static MenuItem[] menu = {
+            new MenuItem("exit", "Exit the program", Exit),
+            new MenuItem("list", "List all employees", ListEmployees),
+            new MenuItem("add", "Add an employee", AddEmployee),
+            new MenuItem("rem", "Remove an employee", RemoveEmployee),
+            new MenuItem("mod", "Modify an employee", ModifyEmployee),
+            new MenuItem("save", "Save the registry to file", SaveCompany),
+            new MenuItem("load", "Load the registry from file", LoadCompany),
+        };
 
         static void Main(string[] args) {
-            bool running = true;
-            while (running) {
-                switch (Menu()) {
-                    case 0: // Quit
-                        running = false;
-                        break;
-                    case 1: // List
-                        ListEmployees();
-                        break;
-                    case 2: // Add
-                        AddEmployee();
-                        break;
-                    case 3: // Remove
-                        RemoveEmployee();
-                        break;
-                    case 4: // Modify
-                        ModifyEmployee();
-                        break;
-                    case 5: // Save
-                        SaveCompany();
-                        break;
-                    case 6: // Load
-                        LoadCompany();
-                        break;
-                    default: // Unreachable
-                        Console.WriteLine("Error???");
-                        break;
+            isRunning = true;
+            while (isRunning) {
+                int sel = Menu();
+                if (sel < menu.Length) {
+                    menu[sel].Callback();
+                }
+                else {
+                    Console.WriteLine("Error????");
                 }
                 Console.WriteLine();
             }
+        }
+
+        private static void Exit() {
+            isRunning = false;
         }
 
         private static void LoadCompany() {
@@ -143,53 +139,33 @@ namespace PersonalRegistret {
 
         public static int Menu() {
             Console.WriteLine("------ Main Menu ------");
-            Console.WriteLine("1. list: List all employees");
-            Console.WriteLine("2. add:  Add a new employee");
-            Console.WriteLine("3. rem:  Remove an employee");
-            Console.WriteLine("4. mod:  Modify an employee");
-            Console.WriteLine("5. save: Save employees to file");
-            Console.WriteLine("6. load: Load employees from file");
-            Console.WriteLine("0. quit: Exit the program");
+            for (int i = 0; i < menu.Length; i++) {
+                Console.WriteLine($"{i}. {menu[i].Command}: {menu[i].Description}");
+            }
             while (true) {
                 string input = Prompt();
                 if (Int32.TryParse(input, out int result)) {
-                    if (result >= 0 && result <= 6) {
+                    if (result >= 0 && result <= menu.Length) {
                         return result;
                     }
                     else {
                         Console.WriteLine("Invalid choice.");
                     }
                 }
-                else if (input == "list") {
-                    return 1;
-                }
-                else if (input == "add") {
-                    return 2;
-                }
-                else if (input == "rem") {
-                    return 3;
-                }
-                else if (input == "mod") {
-                    return 4;
-                }
-                else if (input == "save") {
-                    return 5;
-                }
-                else if (input == "load") {
-                    return 6;
-                }
-                else if (input == "quit") {
-                    return 0;
-                }
                 else {
-                    Console.WriteLine("Invalid command.");
+                    for (int i = 0; i < menu.Length; i++) {
+                        if (menu[i].Command == input) {
+                            return i;
+                        }
+                    }
                 }
+                
             }
         }
 
         public static string Prompt() {
             Console.Write("> ");
-            return Console.ReadLine();
+            return Console.ReadLine().Trim();
         }
 
         public static Employee PromptEmployee() {
